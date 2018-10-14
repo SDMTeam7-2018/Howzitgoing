@@ -19,7 +19,7 @@ var db = mysql.createConnection ({
     // **** PLEASE ENTER YOUR CREDENTIALS IN YOUR LOCAL DATABASE ****
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'Kashmiri@25',
     database: 'howisit'
 });
 
@@ -28,7 +28,7 @@ db.connect((err) => {
   if (err) {
     throw err;
   }
-  
+
   console.log('Connected to database');
 });
 global.db = db;
