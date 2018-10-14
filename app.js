@@ -19,7 +19,7 @@ var db = mysql.createConnection ({
     // **** PLEASE ENTER YOUR CREDENTIALS IN YOUR LOCAL DATABASE ****
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: '******',
     database: 'howisit'
 });
 
