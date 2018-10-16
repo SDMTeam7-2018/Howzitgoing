@@ -24,6 +24,18 @@ var db = mysql.createConnection ({
     reconnect: true
 });
 
+var pool  = mysql.createPool({
+    host     : 'us-cdbr-iron-east-01.cleardb.net',
+    user     : 'b505cdf8124120',
+    password : '78e8f8b7',
+    database : 'heroku_bef5e389669d034'
+});
+
+pool.getConnection(function(err, connection) {
+  if (err) throw err; // not connected!
+  console.log('Pool not Connected');
+});
+
 // connect to database
 db.connect((err) => {
   if (err) {
