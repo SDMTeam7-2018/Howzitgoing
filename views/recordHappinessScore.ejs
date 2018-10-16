@@ -1,0 +1,68 @@
+<% include partials/header.ejs %>
+    <div class="container-fluid">
+        <form id="form_validation" name ="happinessform" class="add-happinesslevel-form" method="post" onchange="allowSubmit()" onsubmit="toggle_div_fun('message');" accept-charset='UTF-8' enctype="multipart/form-data" action="">
+            <h2>Please tell us how happy you are feeling right now about your work?</h2>
+                <div class="row clearfix">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            &emsp;&emsp;<label><input type="radio" name="individual_happiness" value="1" id="individualhappiness" value="small" required /> <img src="images/verysad.PNG" alt="I'm very sad" height="75" width="75"></label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+							<label><input type="radio" name="individual_happiness" value="2" id="individualhappiness" value="small" required /> <img src="images/sad.PNG" alt="I'm sad" height="75" width="75"></label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label><input type="radio" name="individual_happiness" value="3" id="individualhappiness" value="small" required /> <img src="images/neutral.PNG" alt="I'm neutral" height="75" width="75"></label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label><input type="radio" name="individual_happiness" value="4" id="individualhappiness" value="small" required /> <img src="images/happy.PNG" alt="I'm happy" height="75" width="75"></label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label><input type="radio" name="individual_happiness" value="5" id="individualhappiness" value="small" required /> <img src="images/veryhappy.PNG" alt="I'm very happy" height="75" width="75"></label>
+                            <br>
+                            &emsp;&emsp;<label>VERY SAD</label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&thinsp;&thinsp;&thinsp;
+                            <label>SAD</label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label>NEUTRAL</label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label>HAPPY</label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&thinsp;&thinsp;
+                            <label>VERY HAPPY</label>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            <h2>Please indicate how happy you think the team is feeling about their work?</h2>
+                <div class="row clearfix">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+							&emsp;&emsp;<label><input type="radio" name="team_happiness" value="1" id="teamhappiness" value="small" required /> <img src="images/verysad.PNG" alt="I'm very sad" height="75" width="75"></label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label><input type="radio" name="team_happiness" value="2" id="teamhappiness" value="small" required /> <img src="images/sad.PNG" alt="I'm sad" height="75" width="75"></label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label><input type="radio" name="team_happiness" value="3" id="teamhappiness" value="small" required /> <img src="images/neutral.PNG" alt="I'm neutral" height="75" width="75"></label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label><input type="radio" name="team_happiness" value="4" id="teamhappiness" value="small" required /> <img src="images/happy.PNG" alt="I'm happy" height="75" width="75"></label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label><input type="radio" name="team_happiness" value="5" id="teamhappiness" value="small" required /> <img src="images/veryhappy.PNG" alt="I'm very happy" height="75" width="75"></label>
+                            <br>
+                            &emsp;&emsp;<label>VERY SAD</label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&thinsp;&thinsp;&thinsp;
+                            <label>SAD</label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label>NEUTRAL</label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <label>HAPPY</label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&thinsp;&thinsp;
+                            <label>VERY HAPPY</label>
+                        </div>
+                    </div>
+                </div>
+            <br>
+            <br>
+            <script type="text/javascript">
+                function toggle_div_fun(id) {
+                    var divelement = document.getElementById(id);
+                    
+                    if(divelement.style.display == 'block')
+                        divelement.style.display = 'none';
+                    else
+                        divelement.style.display = 'block';
+                        document.happinessform.submit.disabled=true;
+                }
+                function allowSubmit(){
+                    var x = document.forms["happinessform"]["individual_happiness"].value;
+                    var y = document.forms["happinessform"]["team_happiness"].value;
+                    if (x !== "" && y !== "")
+                    {
+                            document.happinessform.submit.disabled=false;
+                    }
+                }                
+            </script>
+            &emsp;<button name="submit" type="submit" id="submit" class="btn btn-primary" disabled="disabled">SUBMIT</button>
+            <div id ="message">Thank you for the Feedback</div>
+        </form>
+    </div>
+</body>
+</html>
