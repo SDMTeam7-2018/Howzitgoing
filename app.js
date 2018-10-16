@@ -17,9 +17,9 @@ const port = 5000;
 var db = mysql.createConnection ({
     multipleStatements: true,
     // **** PLEASE ENTER YOUR CREDENTIALS IN YOUR LOCAL DATABASE ****
-    host: 'localhost',
-    user: 'root',
-    password: 'howisit@team07',
+    host: 'us-cdbr-iron-east-01.cleardb.net',
+    user: 'b505cdf8124120',
+    password: '78e8f8b7',
     database: 'howisit'
 });
 
