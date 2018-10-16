@@ -10,20 +10,20 @@ var app = express();
 var {getHomePage} = require('./routes/index');
 var {recordScorePage, recordScore} = require('./routes/teammember');
 
-var db = require('./config/db');
+var {connection} = require('./config/db');
 
 //const port = 5000;
 
 // create connection to database
 // the mysql.createConnection function takes in a configuration object which contains host, user, password and the database name.
-/*var db = mysql.createConnection ({
+var db = mysql.createConnection ({
     multipleStatements: true,
     // **** PLEASE ENTER YOUR CREDENTIALS IN YOUR LOCAL DATABASE ****
     host: 'us-cdbr-iron-east-01.cleardb.net',
     user: 'b505cdf8124120',
     password: '78e8f8b7',
     database: 'heroku_bef5e389669d034'
-}); */
+});
 
 // connect to database
 db.connect((err) => {
@@ -32,8 +32,8 @@ db.connect((err) => {
   }
 
   console.log('Connected to database');
-});
-global.db = db;
+}); 
+
 
 // configure middleware
 //app.set('port', process.env.PORT || port); // set express to use this port
