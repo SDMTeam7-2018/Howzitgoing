@@ -10,9 +10,7 @@ var app = express();
 var {getHomePage} = require('./routes/index');
 var {recordScorePage, recordScore} = require('./routes/teammember');
 
-var {connection} = require('./config/db');
-
-//const port = 5000;
+const port = 5000;
 
 // create connection to database
 // the mysql.createConnection function takes in a configuration object which contains host, user, password and the database name.
@@ -30,13 +28,12 @@ db.connect((err) => {
   if (err) {
     throw err;
   }
-
   console.log('Connected to database');
 }); 
-
+global.db = db;
 
 // configure middleware
-//app.set('port', process.env.PORT || port); // set express to use this port
+app.set('port', process.env.PORT || port); // set express to use this port
 app.set('views', __dirname + '/views'); // set express to look in this folder to render our view
 app.set('view engine', 'ejs'); // configure template engine
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -52,9 +49,10 @@ app.post('/add', recordScore);
 
 
 // set the app to listen on the port
-/*app.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
-});*/
-app.listen(process.env.PORT || 5000, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
+
+/*app.listen(process.env.PORT || 5000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});*/
