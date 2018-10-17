@@ -62,10 +62,10 @@ var db_config = {
     database: 'heroku_bef5e389669d034'
 }
 
-var db = mysql_npm.createConnection(db_config);
+var db = mysql_npm.createPool(db_config);
 
 // connect to database
-db.connect((err) => {
+db.getConnection((err) => {
   if (err) {
     throw err;
     console.log("\n\t *** Cannot establish a connection with the database. ***");
@@ -74,24 +74,21 @@ db.connect((err) => {
     }else {
         console.log("\n\t *** New connection established with the database. ***")
     }
-  }
-); 
+  });
+
 global.db = db;
 
 function handleDisconnect(db){
     console.log("\n New connection tentative...");
     
-        //- Destroy the current connection variable
-        if(db) db.destroy();
-    
         //- Create a new one
-        var db = mysql_npm.createConnection(db_config);
+        var db = mysql_npm.createPool(db_config);
     
         //- Try to reconnect
         db.connect(function(err){
             if(err) {
                 //- Try to connect every 2 seconds.
-                setTimeout(reconnect, 2000);
+                setTimeout(handleDisconnect(db), 2000);
             }else {
                 console.log("\n\t *** New connection established with the database. ***")
                 return db;
