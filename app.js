@@ -1,7 +1,7 @@
 var express = require('express');
 var fileUpload = require('express-fileupload');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
+var mysql_npm = require('mysql');
 const notifier = require('node-notifier');
 var path = require('path');
 var opn = require('opn');
@@ -62,7 +62,7 @@ var db_config = {
     database: 'heroku_bef5e389669d034'
 }
 
-var db = mysql.createConnection(db_config);
+var db = mysql_npm.createConnection(db_config);
 
 // connect to database
 db.connect((err) => {
@@ -85,7 +85,7 @@ function handleDisconnect(db){
         if(db) db.destroy();
     
         //- Create a new one
-        var db = mysql.createConnection(db_config);
+        var db = mysql_npm.createConnection(db_config);
     
         //- Try to reconnect
         db.connect(function(err){
@@ -123,6 +123,7 @@ function handleDisconnect(db){
         //- Error because a connection is already being established
         else if(err.code === "PROTOCOL_ENQUEUE_HANDSHAKE_TWICE"){
             console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
+            db = handleDisconnect(db);
         }
     
         //- Anything else
