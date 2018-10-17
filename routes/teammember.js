@@ -1,4 +1,5 @@
 const fs = require('fs');
+const util = require('util');
 
 module.exports = {
 
@@ -20,10 +21,18 @@ module.exports = {
 
             db.query(query, (err, result) => {
                 if (err) {
+                    //connection.end();
                     return res.status(500).send(err);
                 }
 
-            db.query("SELECT * FROM `team_members`", function (error, results, fields) {
+                res.render('recordHappinessScore.ejs', {
+                    title: "Record your happiness level here"
+                });
+                //connection.release();
+            })
+
+           /* let query1 = "SELECT * FROM `team_members`"; 
+            db.query(query1, function (error, results, fields) {
             // When done with the connection, release it.
                 db.release();
             
@@ -32,8 +41,9 @@ module.exports = {
                 
             // Don't use the connection here, it has been returned to the pool.
 
-            });
-
-        }
+            }); */
+            // Promisify for Node.js async/await.
+            //db.query = util.promisify(pool.query)
 
     }
+}

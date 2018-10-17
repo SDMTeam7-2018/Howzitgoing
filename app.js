@@ -21,20 +21,39 @@ var db = mysql.createConnection ({
     user: 'b505cdf8124120',
     password: '78e8f8b7',
     database: 'heroku_bef5e389669d034',
-    reconnect: true
+    reconnect: true,
+    wait_timeout: 10000000000000000000000000
+    //pool: { maxConnections: 50, maxIdleTime: 3000000}
 });
 
 var pool  = mysql.createPool({
     host     : 'us-cdbr-iron-east-01.cleardb.net',
     user     : 'b505cdf8124120',
     password : '78e8f8b7',
-    database : 'heroku_bef5e389669d034'
+    database : 'heroku_bef5e389669d034',
+    port : process.env.PORT || port
 });
 
-pool.getConnection(function(err, connection) {
-  if (err) throw err; // not connected!
-  console.log('Pool not Connected');
-});
+// Ping database to check for common exception errors.
+pool.getConnection((err, connection) => {
+  if (err) {
+      if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+          console.error('Database connection was closed.')
+      }
+      if (err.code === 'ER_CON_COUNT_ERROR') {
+          console.error('Database has too many connections.')
+      }
+      if (err.code === 'ECONNREFUSED') {
+          console.error('Database connection was refused.')
+      }
+  }
+
+  //if (connection) connection.release()
+  global.connection = connection;
+  
+  return
+})
+
 
 // connect to database
 db.connect((err) => {
@@ -44,6 +63,7 @@ db.connect((err) => {
   console.log('Connected to database');
 }); 
 global.db = db;
+
 
 // configure middleware
 app.set('port', process.env.PORT || port); // set express to use this port
