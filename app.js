@@ -14,7 +14,7 @@ const port = 5000;
 
 // create connection to database
 // the mysql.createConnection function takes in a configuration object which contains host, user, password and the database name.
-var db = mysql.createConnection ({
+/* var db = mysql.createConnection ({
     multipleStatements: true,
     // **** PLEASE ENTER YOUR CREDENTIALS IN YOUR LOCAL DATABASE ****
     host: 'us-cdbr-iron-east-01.cleardb.net',
@@ -24,7 +24,7 @@ var db = mysql.createConnection ({
     reconnect: true,
     wait_timeout: 0
     //pool: { maxConnections: 50, maxIdleTime: 3000000}
-});
+}); */
 
 /*var pool  = mysql.createPool({
     host     : 'us-cdbr-iron-east-01.cleardb.net',
@@ -54,42 +54,84 @@ pool.getConnection((err, connection) => {
   return
 }) */
 
-//var connection;
-
-function handleDisconnect() {
-    console.log('1. connecting to db:');
-    //connection = db; // Recreate the connection, since
-													// the old one cannot be reused.
-
-    db.connect(function(err) {              	// The server is either down
-        if (err) {                                     // or restarting (takes a while sometimes).
-            console.log('2. error when connecting to db:', err);
-            setTimeout(handleDisconnect, 1000); // We introduce a delay before attempting to reconnect,
-        }                                     	// to avoid a hot loop, and to allow our node script to
-    });                                     	// process asynchronous requests in the meantime.
-    											// If you're also serving http, display a 503 error.
-    db.on('error', function(err) {
-        console.log('3. db error', err);
-        if (err.code === 'PROTOCOL_CONNECTION_LOST') { 	// Connection to the MySQL server is usually
-            handleDisconnect();                      	// lost due to either server restart, or a
-        } else {                                      	// connnection idle timeout (the wait_timeout
-            throw err;                                  // server variable configures this)
-        }
-    });
+var db_config = {
+    // **** PLEASE ENTER YOUR CREDENTIALS IN YOUR LOCAL DATABASE ****
+    host: 'us-cdbr-iron-east-01.cleardb.net',
+    user: 'b505cdf8124120',
+    password: '78e8f8b7',
+    database: 'heroku_bef5e389669d034'
 }
 
-handleDisconnect();
-global.db = db;
+var db = mysql.createConnection(db_config);
 
 // connect to database
-/*db.connect((err) => {
+db.connect((err) => {
   if (err) {
     throw err;
-    db.release();
+    console.log("\n\t *** Cannot establish a connection with the database. ***");
+
+        db = handleDisconnect(db);
+    }else {
+        console.log("\n\t *** New connection established with the database. ***")
+    }
   }
-  console.log('Connected to database');
-}); 
-global.db = db; */
+); 
+global.db = db;
+
+function handleDisconnect(db){
+    console.log("\n New connection tentative...");
+    
+        //- Destroy the current connection variable
+        if(db) db.destroy();
+    
+        //- Create a new one
+        var db = mysql.createConnection(db_config);
+    
+        //- Try to reconnect
+        db.connect(function(err){
+            if(err) {
+                //- Try to connect every 2 seconds.
+                setTimeout(reconnect, 2000);
+            }else {
+                console.log("\n\t *** New connection established with the database. ***")
+                return db;
+            }
+        });
+    }
+    
+    //- Error listener
+    db.on('error', function(err) {
+    
+        //- The server close the connection.
+        if(err.code === "PROTOCOL_CONNECTION_LOST"){    
+            console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
+            db = handleDisconnect(db);
+        }
+    
+        //- Connection in closing
+        else if(err.code === "PROTOCOL_ENQUEUE_AFTER_QUIT"){
+            console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
+            db = handleDisconnect(db);
+        }
+    
+        //- Fatal error : connection variable must be recreated
+        else if(err.code === "PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR"){
+            console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
+            db = handleDisconnect(db);
+        }
+    
+        //- Error because a connection is already being established
+        else if(err.code === "PROTOCOL_ENQUEUE_HANDSHAKE_TWICE"){
+            console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
+        }
+    
+        //- Anything else
+        else{
+            console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
+            db = handleDisconnect(db);
+        }
+    
+    });
 
 
 // configure middleware
