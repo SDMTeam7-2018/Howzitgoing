@@ -43,7 +43,7 @@ module.exports = {
 
             }); */
             // Promisify for Node.js async/await.
-            //db.query = util.promisify(pool.query)
+            db.query = util.promisify(db.query)
 
     }
 }
