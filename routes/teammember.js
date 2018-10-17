@@ -21,7 +21,7 @@ module.exports = {
 
             db.query(query, (err, result) => {
                 if (err) {
-                    //connection.end();
+                    db.release();
                     return res.status(500).send(err);
                 }
 

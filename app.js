@@ -59,6 +59,7 @@ pool.getConnection((err, connection) => {
 db.connect((err) => {
   if (err) {
     throw err;
+    db.release();
   }
   console.log('Connected to database');
 }); 
