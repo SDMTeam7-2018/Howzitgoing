@@ -21,7 +21,7 @@
                         </div>
                     </div>
                 </div>
-            <h2>Please indicate how happy you think the team is feeling about their work?</h2>
+            <h2>Please indicate how happy you think the team is feeling about their work</h2>
                 <div class="row clearfix">
                     <div class="col-sm-12">
                         <div class="form-group">
@@ -50,6 +50,7 @@
                     else
                         divelement.style.display = 'block';
                         document.happinessform.submit.disabled=true;
+                        window.setTimeout(50000);
                 }
                 function allowSubmit(){
                     var x = document.forms["happinessform"]["individual_happiness"].value;
