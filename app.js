@@ -22,7 +22,7 @@ var db = mysql.createConnection ({
     password: '78e8f8b7',
     database: 'heroku_bef5e389669d034',
     reconnect: true,
-    wait_timeout: 10000000000000000000000000
+    //wait_timeout: 10000000000000000000000000
     //pool: { maxConnections: 50, maxIdleTime: 3000000}
 });
 
