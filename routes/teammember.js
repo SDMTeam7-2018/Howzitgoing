@@ -21,7 +21,7 @@ module.exports = {
 
             db.query(query, (err, result) => {
                 if (err) {
-                    db.release();
+                    //db.release();
                     return res.status(500).send(err);
                 }
 
@@ -43,7 +43,7 @@ module.exports = {
 
             }); */
             // Promisify for Node.js async/await.
-            db.query = util.promisify(db.query)
+            //db.query = util.promisify(db.query)
 
     }
 }

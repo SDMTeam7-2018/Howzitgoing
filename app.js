@@ -26,7 +26,7 @@ var db = mysql.createConnection ({
     //pool: { maxConnections: 50, maxIdleTime: 3000000}
 });
 
-var pool  = mysql.createPool({
+/*var pool  = mysql.createPool({
     host     : 'us-cdbr-iron-east-01.cleardb.net',
     user     : 'b505cdf8124120',
     password : '78e8f8b7',
@@ -46,24 +46,50 @@ pool.getConnection((err, connection) => {
       if (err.code === 'ECONNREFUSED') {
           console.error('Database connection was refused.')
       }
-  }
+  } 
 
   //if (connection) connection.release()
   global.connection = connection;
   
   return
-})
+}) */
 
+//var connection;
+
+function handleDisconnect() {
+    console.log('1. connecting to db:');
+    //connection = db; // Recreate the connection, since
+													// the old one cannot be reused.
+
+    db.connect(function(err) {              	// The server is either down
+        if (err) {                                     // or restarting (takes a while sometimes).
+            console.log('2. error when connecting to db:', err);
+            setTimeout(handleDisconnect, 1000); // We introduce a delay before attempting to reconnect,
+        }                                     	// to avoid a hot loop, and to allow our node script to
+    });                                     	// process asynchronous requests in the meantime.
+    											// If you're also serving http, display a 503 error.
+    db.on('error', function(err) {
+        console.log('3. db error', err);
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') { 	// Connection to the MySQL server is usually
+            handleDisconnect();                      	// lost due to either server restart, or a
+        } else {                                      	// connnection idle timeout (the wait_timeout
+            throw err;                                  // server variable configures this)
+        }
+    });
+}
+
+handleDisconnect();
+global.db = db;
 
 // connect to database
-db.connect((err) => {
+/*db.connect((err) => {
   if (err) {
     throw err;
     db.release();
   }
   console.log('Connected to database');
 }); 
-global.db = db;
+global.db = db; */
 
 
 // configure middleware
